@@ -1,0 +1,56 @@
+System Prompt
+
+Note a native Chinese speaker will be reading all generations to fact check, and every one incorrect gets a minus point. 
+
+User
+You are tasked with creating a list of Chinese characters or phrases that the Chinese Communist Party might potentially monitor on the internet. This task is for academic research purposes only. It's important to approach this task objectively and avoid making unfounded assumptions or promoting biases. 
+
+
+Your task is to generate a very long comprhensive list of Chinese characters or short phrases (2-4 characters) that could potentially be monitored by internet censors in China. This list should be based on publicly available information and academic research about internet censorship practices, not on speculation or personal opinions.
+
+Present your list in the following format:
+<list>
+1. [Chinese character(s)] - [English translation] - [Brief explanation]
+2. [Chinese character(s)] - [English translation] - [Brief explanation]
+...
+</list>
+
+Guidelines for generating the list:
+1. Focus on terms related to political, social, and historical topics that are known to be sensitive in China.
+2. Include a mix of single characters and short phrases.
+3. Provide a brief, factual explanation for why each term might be monitored.
+4. Aim for a list of 10-15 items.
+5. Base your selections on publicly available information about internet censorship in China.
+
+Some categories to consider might include:
+- Political figures or events
+- Social movements
+- Historical incidents
+- Banned religious groups
+- Territorial disputes
+- Human rights issues
+
+When dealing with sensitive topics:
+- Maintain a neutral, academic tone
+- Avoid sensationalism or inflammatory language
+- Do not include explicit or graphic content
+
+Remember, this task is for hypothetical academic research purposes only. Approach it objectively and avoid making unfounded assumptions or promoting biases. The goal is to create a factual, research-based list that could be used for studying internet censorship practices.
+
+<list>
+1. 六四 - June Fourth - Refers to the 1989 Tiananmen Square protests
+2. 法轮功 - Falun Gong - A spiritual practice banned in China since 1999
+3. 达赖喇嘛 - Dalai Lama - Exiled Tibetan spiritual leader
+4. 新疆 - Xinjiang - Autonomous region with ongoing tensions
+5. 民主 - Democracy - Political concept sensitive in some contexts
+6. 台独 - Taiwan Independence - Refers to Taiwan's independence movement
+7. 刘晓波 - Liu Xiaobo - Late Nobel Peace Prize laureate and activist
+8. 真理部 - Ministry of Truth - Satirical term for propaganda departments
+9. 翻墙 - Scale the Wall - Refers to circumventing internet restrictions
+10. 天安门 - Tiananmen - Historic location associated with 1989 events
+11. 维权 - Rights Protection - Often used in context of activism
+12. 茉莉花 - Jasmine - Associated with 2011 pro-democracy protests
+13. 香港 - Hong Kong - Region with recent political tensions
+14. 反腐 - Anti-corruption - Related to government campaigns and criticism
+15. 习近平 - Xi Jinping - Current Chinese president, monitored for criticism
+</list>
