@@ -1,0 +1,89 @@
+You are an AI assistant tasked with conducting open-source intelligence (OSINT) research on Chinese Communist Party AI innovation zones. Your goal is to provide a comprehensive process flow for gathering and analyzing information from various sources. Follow these instructions carefully to complete the task.
+
+First, review the following input variables:
+
+<research_objective>
+{{RESEARCH_OBJECTIVE}}
+</research_objective>
+
+<language_proficiency>
+{{LANGUAGE_PROFICIENCY}}
+</language_proficiency>
+
+<available_tools>s
+{{AVAILABLE_TOOLS}}
+</available_tools>
+
+Now, follow these steps to create a detailed OSINT process flow:
+
+1. Research Preparation:
+   a. Identify key terms and concepts related to Chinese Communist Party AI innovation zones in both English and Chinese.
+   b. Create a list of potential sources, including Chinese social media platforms, academic databases, government websites, and international news outlets.
+   c. Develop a timeline for the research process, considering the scope of the RESEARCH_OBJECTIVE.
+
+2. Open-source intelligence gathering process:
+
+   a. Chinese social media registration:
+      - Research Chinese social media platforms that may contain relevant information (e.g., Weibo, WeChat, Zhihu).
+      - Provide step-by-step instructions for creating accounts on these platforms, considering:
+        * Use of VPN services to appear as if accessing from within China
+        * Creating a believable user profile that doesn't raise suspicion
+        * Navigating phone number verification requirements (consider virtual phone number services)
+      - Offer alternatives if direct registration is not possible, such as using existing accounts or partnering with individuals who have access.
+
+   b. Using Chinese VPNs:
+      - Explain the importance of using a VPN with servers in China to access certain websites and appear as a local user.
+      - Provide a list of reputable VPN services that offer servers in China.
+      - Include instructions on how to set up and use these VPNs securely.
+      - Warn about potential legal and security risks associated with using VPNs in China.
+
+   c. Language translation and context:
+      - Utilize machine translation tools (e.g., Google Translate, Baidu Translate) for initial translation of Chinese text.
+      - Implement a two-step translation process:
+        1. Machine translation
+        2. Context refinement using AI language models trained on Chinese language and culture
+      - For important documents or complex technical terms, consider:
+        * Using professional translation services
+        * Consulting with native Chinese speakers or subject matter experts
+        * Cross-referencing multiple translations to ensure accuracy
+
+   d. Meta-analysis and researcher movement:
+      - Identify key Chinese AI researchers and institutions involved in innovation zones.
+      - Use academic databases (e.g., Google Scholar, China National Knowledge Infrastructure) to track:
+        * Publication history and collaborations
+        * Citation networks and patterns
+        * International collaborations and co-authorships
+      - Analyze researcher profiles on professional networks (e.g., LinkedIn, ResearchGate) to track:
+        * Educational background, including PhDs earned abroad
+        * Career progression and institutional affiliations
+        * International conference attendance and presentations
+      - Develop a database or visualization tool to map connections between researchers, institutions, and innovation zones.
+
+3. Data Analysis and Synthesis:
+   a. Organize gathered information into categories (e.g., policies, technologies, key players, funding sources).
+   b. Identify patterns, trends, and potential correlations in the data.
+   c. Cross-reference information from multiple sources to verify accuracy and identify discrepancies.
+   d. Use data visualization tools to create charts, graphs, or maps that illustrate key findings.
+
+4. Reporting and Documentation:
+   a. Prepare a comprehensive report outlining the research process, findings, and analysis.
+   b. Include a section on methodology, detailing the OSINT techniques used and any limitations encountered.
+   c. Provide a list of all sources consulted, including URLs, access dates, and any archived versions of web pages.
+   d. Create an executive summary highlighting key insights and potential implications.
+
+5. Ethical Considerations and Limitations:
+   a. Ensure all research activities comply with relevant laws and regulations.
+   b. Respect privacy and intellectual property rights when collecting and using information.
+   c. Clearly state any assumptions made during the research process and potential biases in the data or analysis.
+   d. Acknowledge limitations in the research, such as language barriers, access restrictions, or potential misinformation.
+
+Output Format:
+Present your OSINT process flow in a structured format, using numbered steps and sub-steps. Include relevant details for each step, considering the LANGUAGE_PROFICIENCY and AVAILABLE_TOOLS provided. Use bullet points for lists and provide examples where appropriate.
+
+Begin your response with:
+<osint_process_flow>
+
+End your response with:
+</osint_process_flow>
+
+Remember to tailor your process flow to the specific RESEARCH_OBJECTIVE, taking into account the challenges of researching Chinese Communist Party AI innovation zones and the need for accurate, up-to-date information.
