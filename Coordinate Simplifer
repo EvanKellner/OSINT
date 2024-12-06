@@ -1,0 +1,404 @@
+idea for later-
+maybe after my masters i can work on it 🙄
+been exploring coordinates...
+
+code is pseudo&notchecked - on phone watching tv
+
+degrees
+minutes
+seconds
+
+degrees decimals minutes
+
+decimals degrees
+(that format we like)
+
+' Pseudocode for displaying alternate coordinate formats on mouse hover
+
+' Assume we have a form with a label (lblCoordinate) that displays coordinates 
+' in a given format, e.g. "53.89.48N  106 21.57E"
+' When the user hovers the mouse over lblCoordinate, we will:
+' 1. Parse the displayed coordinate into a standard, internal latitude/longitude format.
+' 2. Convert that internal representation to the other two common formats (DD, DDM, DMS).
+' 3. Show these alternate formats in a tooltip.
+
+'------------------ ----------
+' Helper Functions
+'----------------------------
+Function ParseCustomFormat(coordString As String) As (lat As Double, lon As Double)
+    ' This function will parse a coordinate in the given custom format into decimal degrees (lat, lon).
+    ' Example format: "53.89.48N  106 21.57E"
+    ' The given format seems to use degrees.minutes.seconds for latitude, and degrees minutes.decimal for longitude.
+    ' We will need to detect directions N/S/E/W and convert accordingly.
+
+    ' Steps:
+    ' 1. Split the input string on spaces.
+    ' 2. Identify latitude and longitude substrings.
+    ' 3. Extract degrees, minutes, seconds (if applicable) from each substring.
+    ' 4. Convert to decimal degrees.
+    ' 5. Apply negative signs if S or W.
+
+    ' PSEUDOCODE:
+    splitParts = Split(coordString, " ")  ' e.g. ["53.89.48N", "106", "21.57E"]
+
+    ' Parse Latitude (e.g. "53.89.48N")
+    latString = splitParts[0]
+    ' Identify direction from last character
+    latDir = Right(latString, 1)          ' Should be N or S
+    latMain = Left(latString, Len(latString)-1)
+
+    ' Latitude might look like "53.89.48" which suggests 53 degrees, 89 minutes, 48 seconds
+    latParts = Split(latMain, ".")        ' ["53", "89", "48"]
+    latDeg = CInt(latParts[0])
+    latMin = CInt(latParts[1])
+    latSec = CInt(latParts[2])
+    latDecimal = latDeg + (latMin/60) + (latSec/3600)
+    If latDir = "S" Then latDecimal = latDecimal * -1
+
+    ' Parse Longitude (e.g. "106", "21.57E")
+    ' Notice the longitude split is in two parts: one is just degrees "106", the other "21.57E"
+    lonDegString = splitParts[1]          ' "106"
+    lonPartString = splitParts[2]         ' "21.57E"
+    lonDir = Right(lonPartString, 1)      ' E or W
+    lonMain = Left(lonPartString, Len(lonPartString)-1)
+
+    lonDeg = CInt(lonDegString)
+    lonMinSecParts = Split(lonMain, ".")  ' ["21", "57"] means 21 minutes and 0.57 fractional minutes
+    lonMin = CInt(lonMinSecParts[0])
+    ' Convert fractional minutes ".57" to decimal minutes
+    lonSecFraction = CDbl("0." & lonMinSecParts[1]) * 60  ' 0.57 * 60 seconds
+
+    ' Convert entire longitude to decimal degrees
+    lonDecimal = lonDeg + (lonMin/60) + (lonSecFraction/3600)
+    If lonDir = "W" Then lonDecimal = lonDecimal * -1
+
+    Return (latDecimal, lonDecimal)
+End Function
+
+Function ConvertToDMS(lat As Double, lon As Double) As String
+    ' Convert decimal degrees to DMS format
+    latDir = IIf(lat < 0, "S", "N")
+    lonDir = IIf(lon < 0, "W", "E")
+
+    lat = Abs(lat)
+    latDeg = Int(lat)
+    latMin = Int((lat - latDeg) * 60)
+    latSec = ((lat - latDeg) * 60 - latMin) * 60
+
+    lon = Abs(lon)
+    lonDeg = Int(lon)
+    lonMin = Int((lon - lonDeg) * 60)
+    lonSec = ((lon - lonDeg) * 60 - lonMin) * 60
+
+    dmsString = latDeg & "° " & latMin & "' " & FormatNumber(latSec, 2) & "'' " & latDir & ", " & _
+                lonDeg & "° " & lonMin & "' " & FormatNumber(lonSec, 2) & "'' " & lonDir
+    Return dmsString
+End Function
+
+Function ConvertToDDM(lat As Double, lon As Double) As String
+    ' Convert decimal degrees to Degrees Decimal Minutes
+    latDir = IIf(lat < 0, "S", "N")
+    lonDir = IIf(lon < 0, "W", "E")
+
+    lat = Abs(lat)
+    latDeg = Int(lat)
+    latMin = (lat - latDeg)*60
+
+    lon = Abs(lon)
+    lonDeg = Int(lon)
+    lonMin = (lon - lonDeg)*60
+
+    ddmString = latDeg & "° " & FormatNumber(latMin, 3) & "' " & latDir & ", " & _
+                lonDeg & "° " & FormatNumber(lonMin, 3) & "' " & lonDir
+    Return ddmString
+End Function
+
+Function ConvertToDD(lat As Double, lon As Double) As String
+    ' Convert to decimal degrees
+    ' Typically just show sign or use N/S/E/W as desired
+    ' For simplicity, show sign-based format: Positive lat = N, negative lat = S, etc.
+    ddString = FormatNumber(lat, 5) & ", " & FormatNumber(lon, 5)
+    Return ddString
+End Function
+
+
+'----------------------------
+' Event: MouseHover over lblCoordinate
+'----------------------------
+Sub lblCoordinate_MouseHover()
+    ' Get the current text of the coordinate label
+    coordText = lblCoordinate.Text
+
+    ' Parse into decimal degrees
+    (latitude, longitude) = ParseCustomFormat(coordText)
+
+    ' Generate other formats
+    dmsFormat = ConvertToDMS(latitude, longitude)
+    ddmFormat = ConvertToDDM(latitude, longitude)
+    ddFormat  = ConvertToDD(latitude, longitude)
+
+    ' Create a string to show in the tooltip
+    tooltipText = "DMS: " & dmsFormat & vbCrLf & _
+                  "DDM: " & ddmFormat & vbCrLf & _
+                  "DD: " & ddFormat
+
+    ' Show the tooltip (assume we have a Tooltip control named ttpCoordinates)
+    ttpCoordinates.SetToolTip(lblCoordinate, tooltipText)
+End Sub
+
+# Pseudocode in Python for converting a custom coordinate format and showing alternate formats.
+# Since Python does not have a built-in hover event like a GUI library might, assume we have:
+# - A GUI framework that allows binding a hover event to a widget (e.g., Tkinter's <Enter> event on a label).
+# - A label widget (coord_label) displaying coordinates in a format like "53.89.48N 106 21.57E"
+# When hovered, we parse and show a tooltip with the alternative formats (DMS, DDM, DD).
+
+def parse_custom_format(coord_string: str) -> (float, float):
+    """
+    Parse a coordinate in the custom format into decimal degrees for latitude and longitude.
+
+    Example Input: "53.89.48N 106 21.57E"
+    - The latitude is "53.89.48N" which might represent 53° 89′ 48″ N
+      (though 89 minutes is non-standard, this is just following user’s given format).
+    - The longitude is split into two parts: "106" and "21.57E".
+      This could represent 106° 21.57′ E.
+    """
+    parts = coord_string.strip().split()
+    # parts example: ["53.89.48N", "106", "21.57E"]
+
+    # Parse latitude
+    lat_str = parts[0]      # e.g. "53.89.48N"
+    lat_dir = lat_str[-1]   # 'N' or 'S'
+    lat_main = lat_str[:-1] # "53.89.48"
+    lat_components = lat_main.split('.') # ["53", "89", "48"]
+    lat_deg = int(lat_components[0])
+    lat_min = int(lat_components[1])
+    lat_sec = int(lat_components[2])
+    lat_decimal = lat_deg + (lat_min / 60.0) + (lat_sec / 3600.0)
+    if lat_dir == 'S':
+        lat_decimal = -lat_decimal
+
+    # Parse longitude
+    lon_deg_str = parts[1]   # e.g. "106"
+    lon_deg = int(lon_deg_str)
+
+    lon_main_str = parts[2]  # e.g. "21.57E"
+    lon_dir = lon_main_str[-1]   # 'E' or 'W'
+    lon_main = lon_main_str[:-1] # "21.57"
+    lon_min_sec = lon_main.split('.') # ["21", "57"]
+    lon_min = int(lon_min_sec[0])
+    # Convert fractional part ".57" to seconds
+    lon_sec_fraction = float("0." + lon_min_sec[1]) * 60.0
+    lon_decimal = lon_deg + (lon_min / 60.0) + (lon_sec_fraction / 3600.0)
+    if lon_dir == 'W':
+        lon_decimal = -lon_decimal
+
+    return lat_decimal, lon_decimal
+
+def convert_to_dms(lat: float, lon: float) -> str:
+    # Convert decimal degrees to DMS
+    lat_dir = 'N' if lat >= 0 else 'S'
+    lon_dir = 'E' if lon >= 0 else 'W'
+    lat_abs = abs(lat)
+    lon_abs = abs(lon)
+
+    lat_deg = int(lat_abs)
+    lat_min = int((lat_abs - lat_deg) * 60)
+    lat_sec = ((lat_abs - lat_deg) * 60 - lat_min) * 60
+
+    lon_deg = int(lon_abs)
+    lon_min = int((lon_abs - lon_deg) * 60)
+    lon_sec = ((lon_abs - lon_deg) * 60 - lon_min) * 60
+
+    return f"{lat_deg}° {lat_min}' {lat_sec:.2f}'' {lat_dir}, {lon_deg}° {lon_min}' {lon_sec:.2f}'' {lon_dir}"
+
+def convert_to_ddm(lat: float, lon: float) -> str:
+    # Convert decimal degrees to Degrees Decimal Minutes
+    lat_dir = 'N' if lat >= 0 else 'S'
+    lon_dir = 'E' if lon >= 0 else 'W'
+    lat_abs = abs(lat)
+    lon_abs = abs(lon)
+
+    lat_deg = int(lat_abs)
+    lat_min = (lat_abs - lat_deg) * 60
+
+    lon_deg = int(lon_abs)
+    lon_min = (lon_abs - lon_deg) * 60
+
+    return f"{lat_deg}° {lat_min:.3f}' {lat_dir}, {lon_deg}° {lon_min:.3f}' {lon_dir}"
+
+def convert_to_dd(lat: float, lon: float) -> str:
+    # Convert to decimal degrees format
+    # Just show numeric values (commonly used in many apps)
+    return f"{lat:.5f}, {lon:.5f}"
+
+# Assuming a GUI framework like Tkinter:
+# This would be bound to an event, for example:
+# coord_label.bind("<Enter>", on_hover)  # When mouse enters the label area
+
+def on_hover(event):
+    coord_text = coord_label["text"]
+    lat, lon = parse_custom_format(coord_text)
+    dms = convert_to_dms(lat, lon)
+    ddm = convert_to_ddm(lat, lon)
+    dd = convert_to_dd(lat, lon)
+
+    tooltip_text = f"DMS: {dms}\nDDM: {ddm}\nDD: {dd}"
+
+    # Assuming we have a tooltip mechanism:
+    show_tooltip(coord_label, tooltip_text)
+
+There isn’t a single, universal Windows API function that just returns whatever text is currently highlighted in any arbitrary application. How you retrieve highlighted text depends heavily on what program or control the text is in:
+	1.	Standard Edit Controls (e.g., in a Windows dialog):
+If the highlighted text is inside a standard Windows edit control (like those created using the EDIT class), you can:
+	•	Get a handle to that edit control (e.g., via FindWindowEx).
+	•	Use SendMessage with EM_GETSEL to find out the start and end positions of the selection.
+	•	Use EM_GETTEXT or WM_GETTEXT to retrieve the entire text and then extract the highlighted portion.
+	2.	Rich Edit Controls (e.g., in WordPad):
+For rich edit controls, you can send messages like EM_EXGETSEL to get the selection range and EM_GETTEXTRANGE to retrieve the selected text.
+	3.	Clipboard Method (For Arbitrary Applications):
+If you’re dealing with arbitrary applications (like a web browser or word processor), there’s no direct Windows API that says “give me the highlighted text.” If the text can be copied (as most selected text in GUI programs can), you might:
+	•	Simulate a Ctrl+C keystroke or send the appropriate message to copy the selection.
+	•	Then use the Windows Clipboard functions (OpenClipboard, GetClipboardData) to retrieve the copied text. This is a workaround, as you rely on the application respecting standard copy operations.
+	4.	Accessibility APIs:
+Sometimes the selection might be accessible via Microsoft UI Automation or older accessibility APIs. Using UI Automation, you can programmatically query controls for their text content and selection ranges, though this is more involved and requires using the UI Automation COM interfaces.
+
+In summary:
+	•	For standard controls: Use control-specific messages (EM_GETSEL, EM_GETTEXT, etc.).
+	•	For arbitrary applications: Use a combination of simulated copy commands and clipboard access or accessibility APIs.
+	•	No single API call universally returns any highlighted text across all applications.
+
+#NoEnv
+#SingleInstance Force
+SetBatchLines -1
+
+; ----------------------------------------
+; Global Variables
+; ----------------------------------------
+Active := False  ; Initially, hovering is inactive
+
+; ----------------------------------------
+; Helper Functions
+; ----------------------------------------
+ParseCustomFormat(CoordString)
+{
+    ; Example: "53.89.48N 106 21.57E"
+    Parts := StrSplit(CoordString, " ")
+    LatStr := Parts[1]
+    LatDir := SubStr(LatStr, 0)
+    LatMain := SubStr(LatStr, 1, StrLen(LatStr)-1)
+    LatParts := StrSplit(LatMain, ".")
+    LatDeg := LatParts[1]
+    LatMin := LatParts[2]
+    LatSec := LatParts[3]
+    LatDecimal := LatDeg + (LatMin/60) + (LatSec/3600)
+    if (LatDir = "S")
+        LatDecimal *= -1
+
+    LonDegStr := Parts[2]
+    LonDeg := LonDegStr
+
+    LonMainStr := Parts[3]
+    LonDir := SubStr(LonMainStr, 0)
+    LonMain := SubStr(LonMainStr, 1, StrLen(LonMainStr)-1)
+    LonParts := StrSplit(LonMain, ".")
+    LonMin := LonParts[1]
+    LonSecFraction := "0." . LonParts[2]
+    LonSecTotal := LonSecFraction * 60
+    LonDecimal := LonDeg + (LonMin/60) + (LonSecTotal/3600)
+    if (LonDir = "W")
+        LonDecimal *= -1
+
+    Return { "Lat": LatDecimal, "Lon": LonDecimal }
+}
+
+ConvertToDMS(Lat, Lon)
+{
+    LatDir := (Lat >= 0) ? "N" : "S"
+    LonDir := (Lon >= 0) ? "E" : "W"
+
+    LatAbs := Abs(Lat)
+    LonAbs := Abs(Lon)
+
+    LatDeg := Floor(LatAbs)
+    LatMin := Floor((LatAbs - LatDeg)*60)
+    LatSec := ((LatAbs - LatDeg)*60 - LatMin)*60
+
+    LonDeg := Floor(LonAbs)
+    LonMin := Floor((LonAbs - LonDeg)*60)
+    LonSec := ((LonAbs - LonDeg)*60 - LonMin)*60
+
+    return Format("{}° {}' {:.2f}'' {}, {}° {}' {:.2f}'' {}"
+        , LatDeg, LatMin, LatSec, LatDir
+        , LonDeg, LonMin, LonSec, LonDir)
+}
+
+ConvertToDDM(Lat, Lon)
+{
+    LatDir := (Lat >= 0) ? "N" : "S"
+    LonDir := (Lon >= 0) ? "E" : "W"
+    LatAbs := Abs(Lat)
+    LonAbs := Abs(Lon)
+
+    LatDeg := Floor(LatAbs)
+    LatMin := (LatAbs - LatDeg)*60
+
+    LonDeg := Floor(LonAbs)
+    LonMin := (LonAbs - LonDeg)*60
+
+    return Format("{}° {:.3f}' {}, {}° {:.3f}' {}"
+        , LatDeg, LatMin, LatDir
+        , LonDeg, LonMin, LonDir)
+}
+
+ConvertToDD(Lat, Lon)
+{
+    return Format("{:.5f}, {:.5f}", Lat, Lon)
+}
+
+; ----------------------------------------
+; GUI Setup
+; ----------------------------------------
+Gui, New, +AlwaysOnTop +ToolWindow
+Gui, Font, s10
+Coord := "53.89.48N 106 21.57E"
+Gui, Add, Text, vCoordLbl w300 h30, %Coord%
+Gui, Add, Button, w200 h30 gActivateHover, Activate Hover Conversion
+Gui, Show, w320 h100, Coordinate
+GuiControlGet, hCtrl, Hwnd, CoordLbl
+
+; We'll use a timer to continuously check mouse position over the label
+SetTimer, CheckHover, 200
+return
+
+ActivateHover:
+    Active := True
+    MsgBox, Hover conversion activated. Now hover over the coordinate label.
+return
+
+CheckHover:
+    if (!Active) {
+        ; If not active, do nothing
+        ToolTip
+        return
+    }
+
+    MouseGetPos, mx, my, mWin, mCtrl
+    if (mCtrl = hCtrl)
+    {
+        ; Mouse is over our label and Active is true
+        result := ParseCustomFormat(Coord)
+        dms := ConvertToDMS(result.Lat, result.Lon)
+        ddm := ConvertToDDM(result.Lat, result.Lon)
+        dd  := ConvertToDD(result.Lat, result.Lon)
+
+        tooltipText := "DMS: " dms "`nDDM: " ddm "`nDD: " dd
+        ToolTip, %tooltipText%, mx+20, my+20
+    }
+    else
+    {
+        ToolTip
+    }
+return
+
+GuiClose:
+ExitApp
